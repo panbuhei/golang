@@ -16,21 +16,21 @@ jobs:
         docker push swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
     # k8s部署
     - run: |
-        sed -i 's/{TAG}/${{ github.sha }}/g' .deploy/deployment.yml
+        sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
     - name: k8s deployment 
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         KUBECTL_VERSION: "1.21"
       with:
-        args: apply -f .deploy/deployment.yml
+        args: apply -f ./deploy/deployment.yml
     - name: k8s service
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         KUBECTL_VERSION: "1.21"
       with:
-        args: apply -f .deploy/service.yml
+        args: apply -f ./deploy/service.yml
     - name: deployment status
       uses: steebchen/kubectl@master
       env:

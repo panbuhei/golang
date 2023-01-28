@@ -15,9 +15,9 @@ jobs:
         cd ./httpserver && docker build . --file Dockerfile --tag swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
         docker push swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
 
-    # 更改deployment/yml中的镜像版本。{TAG}是预留的
+    # 更改deployment/yml中的镜像，{IMAGE}是预留的
     - run: |
-        sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
+        sed -i 's/{IMAGE}/swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}/g' ./deploy/deployment.yml
 
     - name: Deploy to cluster
       uses: myrotvorets/kubectl-action@2.0.0

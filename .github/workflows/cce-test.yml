@@ -35,6 +35,6 @@ jobs:
     - name: Verify deployment
       uses: myrotvorets/kubectl-action@2.0.0
       with:
-        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        config: ${{ secrets.KUBE_CONFIG }}
         version: 1.21
         args: rollout status deployment/wpf-test

@@ -19,6 +19,6 @@ spec:
         - name: default-secret
       containers:
       - name: httpserver
-        image: IMAGE_NAME
+        image: swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:{TAG}
         ports:
         - containerPort: 80

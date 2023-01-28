@@ -17,26 +17,18 @@ jobs:
     # k8s部署
     - run: |
         sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
-    - name: k8s deployment 
+
+    - name: deploy k8s 
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         KUBECTL_VERSION: "1.23"
-      with:
-      #  args: apply -f ./deploy/deployment.yml
-        args: version
-    - name: k8s service
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.23"
-      with:
-      #  args: apply -f ./deploy/service.yml
-        args: version
-    - name: deployment status
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.23"
-      with:
-        args: '"rollout status deployment/wpf-test"'
+    - name: connect k8s
+      run: |
+        kubectl config use-context external
+    - name: deployment
+      run: |
+        kubectl apply -f ./deploy/deployment.yml
+    - name: service
+      run: |
+        kubectl apply -f ./deploy/service.yml

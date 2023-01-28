@@ -21,7 +21,7 @@ jobs:
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.21"
+        KUBECTL_VERSION: "1.23"
       with:
       #  args: apply -f ./deploy/deployment.yml
         args: version
@@ -29,7 +29,7 @@ jobs:
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.21"
+        KUBECTL_VERSION: "1.23"
       with:
       #  args: apply -f ./deploy/service.yml
         args: version
@@ -37,6 +37,6 @@ jobs:
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.21"
+        KUBECTL_VERSION: "1.23"
       with:
         args: '"rollout status deployment/wpf-test"'

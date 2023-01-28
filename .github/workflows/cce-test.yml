@@ -14,7 +14,8 @@ jobs:
         docker login --username=${{ secrets.SWR_USER }} swr.cn-north-4.myhuaweicloud.com --password=${{ secrets.SWR_PASS }}
         cd ./httpserver && docker build . --file Dockerfile --tag swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
         docker push swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
-    # k8s部署
+
+    # 更改deployment/yml中的镜像版本。{TAG}是预留的
     - run: |
         sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
 

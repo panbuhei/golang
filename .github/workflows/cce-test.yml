@@ -4,7 +4,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  buildImageInSwrAndDeployCCE:
     runs-on: ubuntu-latest
 
     steps:
@@ -12,7 +12,7 @@ jobs:
     - name: Build the Docker image
       run: |
         docker login --username=${{ secrets.SWR_USER }} swr.cn-north-4.myhuaweicloud.com --password=${{ secrets.SWR_PASS }}
-        docker build ./httpserver --file Dockerfile --tag swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
+        cd ./httpserver && docker build . --file Dockerfile --tag swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
         docker push swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
     # k8s部署
     - run: |

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wpf-test
+  namespace: default
+  labels:
+    app: wpf-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wpf-test
+  template:
+    metadata:
+      labels:
+        app: wpf-test
+    spec:
+      containers:
+      - name: httpserver
+        image: swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:{TAG}
+        ports:
+        - containerPort: 80

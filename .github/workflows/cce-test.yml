@@ -18,16 +18,13 @@ jobs:
     - run: |
         sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
 
-    - name: kubectl-simple
+    - name: run-kubectl
       # You may pin to the exact commit or the version.
-      # uses: steebchen/kubectl@7c4c70d551952e40881998b840e16d4d9824a54f
-      uses: steebchen/kubectl@v2.1.1
+      # uses: myrotvorets/kubectl-action@ce0afcfd980b4b1e9f04972087b752d319c26d7e
+      uses: myrotvorets/kubectl-action@2.0.0
       with:
-        # kubectl version, e.g. `v1.21.0`, defaults to latest
-        version: v1.21.0
-        # kube config data
-        config: ${{ secrets.KUBE_CONFIG }}
-        # kubectl command to run, without the kubectl, e.g. `get pods`
-        command: cluster-info
-        # Url to download the binaries from, defaults to the official dl.k8s.io url
-        binaries-url: # optional
+        # BASE64-encoded kubeconfig
+        config:  ${{ secrets.KUBE_CONFIG }}
+        # kubectl version (1.18, 1.19, 1.20, 1.21, latest)
+        version: 1.21
+        args: 'apply -f ./deploy/deployment.yml'

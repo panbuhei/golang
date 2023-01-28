@@ -18,9 +18,7 @@ jobs:
     - run: |
         sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
 
-    - name: run-kubectl
-      # You may pin to the exact commit or the version.
-      # uses: myrotvorets/kubectl-action@ce0afcfd980b4b1e9f04972087b752d319c26d7e
+    - name: Deploy to cluster
       uses: myrotvorets/kubectl-action@2.0.0
       with:
         # BASE64-encoded kubeconfig
@@ -28,3 +26,15 @@ jobs:
         # kubectl version (1.18, 1.19, 1.20, 1.21, latest)
         version: 1.21
         args: 'apply -f ./deploy/deployment.yml'
+    - name: svc to cluster
+      uses: myrotvorets/kubectl-action@2.0.0
+      with:
+        config:  ${{ secrets.KUBE_CONFIG }}
+        version: 1.21
+        args: 'apply -f ./deploy/service.yml'
+    - name: Verify deployment
+      uses: myrotvorets/kubectl-action@2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: 1.21
+        args: rollout status deployment/wpf-test

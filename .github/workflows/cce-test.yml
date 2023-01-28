@@ -18,17 +18,16 @@ jobs:
     - run: |
         sed -i 's/{TAG}/${{ github.sha }}/g' ./deploy/deployment.yml
 
-    - name: deploy k8s 
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        KUBECTL_VERSION: "1.23"
-    - name: connect k8s
-      run: |
-        kubectl config use-context external
-    - name: deployment
-      run: |
-        kubectl apply -f ./deploy/deployment.yml
-    - name: service
-      run: |
-        kubectl apply -f ./deploy/service.yml
+    - name: kubectl-simple
+      # You may pin to the exact commit or the version.
+      # uses: steebchen/kubectl@7c4c70d551952e40881998b840e16d4d9824a54f
+      uses: steebchen/kubectl@v2.1.1
+      with:
+        # kubectl version, e.g. `v1.21.0`, defaults to latest
+        version: v1.21.0
+        # kube config data
+        config: ${{ secrets.KUBE_CONFIG }}
+        # kubectl command to run, without the kubectl, e.g. `get pods`
+        command: cluster-info
+        # Url to download the binaries from, defaults to the official dl.k8s.io url
+        binaries-url: # optional

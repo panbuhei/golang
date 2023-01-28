@@ -1,0 +1,40 @@
+name: github action is cce demo
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        docker login --username=${{ secrets.SWR_USER }} swr.cn-north-4.myhuaweicloud.com --password=${{ secrets.SWR_PASS }}
+        docker build . --file Dockerfile --tag swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
+        docker push swr.cn-north-4.myhuaweicloud.com/panbuhei/cce-test:${{ github.sha }}
+    # k8s部署
+    - run: |
+        sed -i 's/{TAG}/${{ github.sha }}/g' .deploy/deployment.yml
+    - name: k8s deployment 
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        KUBECTL_VERSION: "1.21"
+      with:
+        args: apply -f .deploy/deployment.yml
+    - name: k8s service
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        KUBECTL_VERSION: "1.21"
+      with:
+        args: apply -f .deploy/service.yml
+    - name: deployment status
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        KUBECTL_VERSION: "1.21"
+      with:
+        args: '"rollout status deployment/uranus-frontend"'
